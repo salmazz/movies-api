@@ -23,6 +23,9 @@ cp .env.example .env
 composer install
 composer dumpautoload
 ```
+##Env
+Setup env and add your credentials in .env file
+
 
 ## Database
 Setup new Database named "movies_api"
