@@ -13,6 +13,7 @@
 ## Installation
 
 All the code required to get started
+
 ## Clone
 Clone this repo to your local machine using https://github.com/salmazz/movies-api.git
 and run
@@ -23,9 +24,9 @@ cp .env.example .env
 composer install
 composer dumpautoload
 ```
-##Env
-Setup env and add your credentials in .env file
 
+## Environment
+Setup env and add your credentials in .env file
 
 ## Database
 Setup new Database named "movies_api"
