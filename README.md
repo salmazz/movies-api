@@ -1,65 +1,93 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Movies Api Task
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+* Schedule movie seeder API Service from https://www.themoviedb.org
+* Create schedule that runs every Minute to Seed the “recently
+  movies” and “top rated movies” max 100 every seed 
+  including the movie “genres”
+* Store the movies and categories using mysql database
+* Create endpoint to list the movies
+* Can filter the result by some parameters for example filter by category_id , title , 
+  overview,release_date 
+* Can sort the result by some parameters for example sort by most popular movies and top_rated desc 
 
-## About Laravel
+## Installation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+All the code required to get started
+## Clone
+Clone this repo to your local machine using https://github.com/salmazz/movies-api.git
+and run
+```
+git clone https://github.com/salmazz/movies-api.git
+cd movies-api
+cp .env.example .env
+composer install
+composer dumpautoload
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Database
+Setup new Database named "movies_api"
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Docker
+Run Docker Desktop app first 
 
-## Learning Laravel
+# Laravel sail 
+run  ./vendor/bin/sail up -d to setup environment by docker
+```
+./vendor/bin/sail up -d
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Run Migrations
+```bash
+./vendor/bin/sail artisan migrate
+````
+## Configure num_of_records , the scheduler interval time , base_url , language 
+you can edit in config/movies.php
+```
+    'num_of_records' => 10,
+    'api_key' => env('API_KEY'),
+    'base_url'=> 'https://api.themoviedb.org/3/movie/',
+    'language'=> 'en-US',
+    'cron_expression' => '* * * * *',
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Run Queue and job worker
 
-## Laravel Sponsors
+```
+./vendor/bin/sail artisan queue:work
+./vendor/bin/sail artisan schedule:work
+````
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Testing
 
-### Premium Partners
+```
+./vendor/bin/sail artisan test
+````
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## APIs
+* List of movies endpoint:  http://movies-api.test/api/movies/list-of-movies
+* Available search parameters:  [q, category_id, original_language, release_date and sort_by]
+* Example for filtering:  http://movies-api.test/api/movies/list-of-movies?q=title&sort_by=top_rated
+ ```
+  "data": [
+    {
+      "movie_id": 843241,
+      "backdrop_path": "/7h5WAPAcUzOWpp2jrwHBB48790j.jpg",
+      "adult": "false",
+      "genre_ids": [
+        16,
+        28
+      ],
+      "original_language": "ja",
+      "original_title": "劇場版 七つの大罪 光に呪われし者たち",
+      "overview": "With the help of the \"Dragon Sin of Wrath\" Meliodas and the worst rebels in history, the Seven Deadly Sins, the \"Holy War\", in which four races, including Humans, Goddesses, Fairies and Giants fought against the Demons, is finally over. At the cost of the \"Lion Sin of Pride\" Escanor's life, the Demon King was defeated and the world regained peace. After that, each of the Sins take their own path.",
+      "popularity": 1080.22,
+      "poster_path": "/k0ThmZQl5nHe4JefC2bXjqtgYp0.jpg",
+      "release_date": "2021-07-02",
+      "title": "The Seven Deadly Sins: Cursed by Light",
+      "video": "no video for this item",
+      "vote_average": 8.4,
+      "vote_count": 205,
+      "type_of_movie": "popular"
+    },
+],
+```
